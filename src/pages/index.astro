@@ -1,192 +1,951 @@
----
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
----
-
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="MAKEROOM is an evolving series of creative, mindful activations in the Arts District, Los Angeles. The inaugural one opens Friday, October 9, 2026: 12 to 4 PM all ages, 5 to 9 PM 21+.">
+<link rel="canonical" href="https://www.makeroomexp.org/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2317140F'/><text x='16' y='23' font-family='Helvetica,Arial' font-size='19' font-weight='700' fill='%23E8E5DF' text-anchor='middle'>M</text></svg>">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MAKEROOM">
+<meta property="og:title" content="MAKEROOM: There should be room for becoming">
+<meta property="og:description" content="MAKEROOM is an evolving series of creative, mindful activations in the Arts District, Los Angeles. The inaugural one opens Friday, October 9, 2026: 12 to 4 PM all ages, 5 to 9 PM 21+.">
+<meta property="og:url" content="https://www.makeroomexp.org/">
+<meta property="og:image" content="https://www.makeroomexp.org/assets/img/hero.jpg">
+<meta property="og:image:alt" content="The MAKEROOM space in the Arts District: exposed brick, concrete and steel windows in late afternoon light.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#17140F">
+<title>MAKEROOM: There should be room for becoming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..112,200..800&display=swap">
+<style>
+/* ==========================================================================
+   MAKEROOM, makeroomexp.org
+   Single stylesheet. Sections in order:
+     1. Tokens          color, type and spacing custom properties
+     2. Base            reset and document defaults
+     3. Shared          grain, layout wrapper, labels, buttons, forms
+     4. Home            hero, statement, program, experiment, people, close
+     5. Footer
+     6. Focus + motion
+     7. Simple page     404 (scoped to .page-simple)
+   Type is one family (Archivo); hierarchy comes from weight, width and case.
+   Color is one warm-neutral ramp: the photographs carry all the color.
+   ========================================================================== */
 
-		<style>
-			:global(html) {
-				scroll-behavior: smooth;
-			}
 
-			:global(body) {
-				margin: 0;
-				background: #f2eee6;
-				color: #171717;
-				font-family: Arial, Helvetica, sans-serif;
-			}
+/* --- 1. TOKENS ----------------------------------------------------------- */
+:root{
+  /* one warm-neutral ramp: the photographs carry all the color */
+  --paper:#E8E5DF;
+  --paper-2:#DFDBD4;
+  --ink:#17140F;
+  --ink-2:#221E19;
+  --gray-1:#5A544B;   /* secondary text on paper */
+  --gray-2:#8C857A;   /* tertiary / text on ink */
+  --gray-3:#C6C0B6;   /* body text on ink */
+  --rule:#C8C3B8;
+  --rule-ink:#3A352D;
 
-			main {
-				min-height: 100vh;
-			}
+  --gutter:clamp(20px,5vw,72px);
+  --maxw:1440px;
+  --col-gap:clamp(28px,4.4vw,64px);   /* the one gutter every grid uses */
 
-			.hero {
-				min-height: 85vh;
-				display: flex;
-				align-items: flex-end;
-				padding: 8vw;
-				box-sizing: border-box;
-				background: #171717;
-				color: #f2eee6;
-			}
+  --f:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
 
-			.hero-content {
-				max-width: 1000px;
-			}
+/* --- 2. BASE ------------------------------------------------------------- */
+*{box-sizing:border-box}
 
-			.eyebrow {
-				font-size: 14px;
-				letter-spacing: 0.18em;
-				text-transform: uppercase;
-				margin-bottom: 24px;
-			}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--f);
+  font-size:16px;
+  font-weight:400;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
 
-			h1 {
-				font-size: clamp(4rem, 12vw, 10rem);
-				line-height: 0.82;
-				letter-spacing: -0.07em;
-				margin: 0 0 32px;
-			}
+img{max-width:100%;display:block}
+a{color:inherit}
+::selection{background:var(--ink);color:var(--paper)}
 
-			.hero p {
-				font-size: clamp(1.2rem, 2vw, 1.8rem);
-				line-height: 1.4;
-				max-width: 700px;
-				margin: 0;
-			}
+/* --- 3. SHARED ----------------------------------------------------------- */
+/* paper grain */
+.grain{
+  position:fixed;inset:0;z-index:60;pointer-events:none;
+  opacity:.45;mix-blend-mode:multiply;
+}
 
-			.section {
-				padding: 100px 8vw;
-			}
+/* layout wrapper */
+.wrap{
+  width:100%;max-width:var(--maxw);margin:0 auto;
+  padding-inline:var(--gutter);
+}
 
-			.section h2 {
-				font-size: clamp(2.5rem, 6vw, 5rem);
-				line-height: 0.95;
-				letter-spacing: -0.05em;
-				margin: 0 0 32px;
-			}
+/* keyboard skip link: off-screen until focused */
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:100;
+  background:var(--ink);color:var(--paper);
+  padding:14px 22px;text-decoration:none;
+  font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+}
+.skip:focus{left:0}
 
-			.section p {
-				font-size: 1.25rem;
-				line-height: 1.6;
-				max-width: 720px;
-			}
+.eyebrow{
+  font-size:10px;font-weight:600;
+  letter-spacing:.28em;text-transform:uppercase;
+  color:var(--gray-1);
+  margin:0;
+}
+.eyebrow--lit{color:var(--gray-2)}
 
-			.info-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-				gap: 24px;
-				margin-top: 60px;
-			}
+.vert{
+  position:absolute;
+  writing-mode:vertical-rl;
+  font-size:8px;font-weight:600;
+  letter-spacing:.24em;text-transform:uppercase;
+  white-space:nowrap;
+}
 
-			.card {
-				border-top: 2px solid currentColor;
-				padding-top: 20px;
-			}
+/* --- 4. HOME ------------------------------------------------------------- */
+/* hero */
+.hero{
+  position:relative;
+  min-height:88vh;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  background:var(--ink);
+  isolation:isolate;
+}
+.hero__img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:52% 42%;
+  z-index:-2;
+}
+.hero__scrim{
+  position:absolute;inset:0;z-index:-1;
+  background:
+    linear-gradient(180deg,rgba(16,13,10,.84) 0%,rgba(16,13,10,.36) 26%,rgba(16,13,10,.16) 46%,rgba(16,13,10,.66) 78%,rgba(16,13,10,.90) 100%),
+    linear-gradient(95deg,rgba(16,13,10,.58) 0%,rgba(16,13,10,.06) 58%);
+}
 
-			.card h3 {
-				font-size: 1.1rem;
-				text-transform: uppercase;
-				letter-spacing: 0.08em;
-			}
+.nav{
+  position:relative;z-index:2;
+  padding-top:clamp(18px,2.4vw,30px);
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:20px;flex-wrap:wrap;
+}
+.nav__mark{
+  font-size:12px;font-weight:700;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--paper);
+  text-decoration:none;
+}
+.nav__mark span{font-weight:300}
+.nav__links{display:flex;gap:clamp(16px,2.4vw,34px)}
+.nav__links a{
+  font-size:10px;font-weight:600;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--paper);
+  text-decoration:none;opacity:.7;
+  padding-block:6px;
+  transition:opacity .25s ease;
+}
+.nav__links a:hover,.nav__links a:focus-visible{opacity:1}
 
-			.card p {
-				font-size: 1rem;
-			}
+.hero__body{
+  position:relative;z-index:2;
+  flex:1;
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  gap:clamp(40px,7vh,90px);
+  padding-block:clamp(30px,6vh,64px) clamp(34px,7vh,78px);
+}
 
-			.cta {
-				background: #d9d1c2;
-			}
+.wordmark{
+  margin:0;
+  font-weight:700;
+  font-stretch:92%;
+  font-size:clamp(2.7rem,13.4vw,11.8rem);
+  line-height:.88;
+  letter-spacing:.008em;
+  color:var(--paper);
+  white-space:nowrap;
+}
+.wordmark span{font-weight:200;letter-spacing:.05em}
 
-			.cta a {
-				display: inline-block;
-				margin-top: 20px;
-				padding: 16px 24px;
-				background: #171717;
-				color: #f2eee6;
-				text-decoration: none;
-				text-transform: uppercase;
-				letter-spacing: 0.1em;
-				font-weight: bold;
-			}
-		</style>
-	</head>
+.hero__low{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:clamp(22px,3.4vw,40px);
+  align-items:end;
+}
+@media(min-width:900px){
+  .hero__low{grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr)}
+}
 
-	<body>
-		<Header />
+h1.hl{margin:0;text-wrap:balance}
+.hl__caps{
+  display:block;
+  font-weight:600;
+  font-size:clamp(1.1rem,3.3vw,2.35rem);
+  line-height:1.06;
+  letter-spacing:.005em;
+  text-transform:uppercase;
+  color:var(--paper);
+  opacity:.92;
+}
+.hl__big{
+  display:inline-block;position:relative;
+  font-weight:200;
+  font-stretch:96%;
+  font-size:clamp(3.1rem,9.8vw,7.6rem);
+  line-height:.98;letter-spacing:-.028em;
+  color:var(--paper);
+  margin-top:clamp(6px,1.2vw,16px);
+  padding-inline:clamp(8px,1.6vw,24px);
+}
+.hl__ring{
+  position:absolute;left:0;top:50%;
+  width:100%;height:126%;
+  transform:translateY(-50%) rotate(-1.4deg);
+  pointer-events:none;overflow:visible;
+}
+.hl__ring path{
+  fill:none;stroke:var(--paper);stroke-width:1.6;
+  stroke-linecap:round;opacity:.45;
+  vector-effect:non-scaling-stroke;
+}
 
-		<main>
-			<section class="hero">
-				<div class="hero-content">
-					<div class="eyebrow">Los Angeles · Arts District · October 9, 2026</div>
+.hero__aside{display:flex;flex-direction:column;gap:20px}
+.hero__sub{
+  margin:0;max-width:34ch;
+  font-size:clamp(.94rem,1.3vw,1.05rem);
+  line-height:1.55;color:var(--paper);opacity:.82;
+}
 
-					<h1>MAKEROOM</h1>
+.cta{
+  align-self:flex-start;
+  display:inline-flex;align-items:center;gap:14px;
+  padding:16px 26px 16px 0;
+  font-size:11px;font-weight:700;letter-spacing:.28em;
+  text-transform:uppercase;text-decoration:none;
+  color:var(--paper);
+  border-bottom:1px solid rgba(232,229,223,.4);
+  transition:border-color .3s ease,gap .3s ease;
+  min-height:44px;
+}
+.cta:hover,.cta:focus-visible{border-color:var(--paper);gap:22px}
+.cta svg{width:44px;height:15px;flex:none;overflow:visible}
+.cta svg path{fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round}
 
-					<p>
-						A space for art, wardrobe, alteration, hospitality, music,
-						and the people becoming something new.
-					</p>
-				</div>
-			</section>
+.hero__edge{
+  right:calc(var(--gutter) * .32);
+  top:32%;
+  color:#D4CFC7;
+  text-shadow:0 1px 10px rgba(16,13,10,.95),0 0 3px rgba(16,13,10,.8);
+  z-index:2;
+}
+@media(max-width:899px){.hero__edge{display:none}}
 
-			<section class="section">
-				<div class="eyebrow">The idea</div>
+/* statement */
+.statement{padding-block:clamp(78px,13vh,170px)}
+.statement__grid{
+  display:grid;row-gap:clamp(34px,5vw,56px);column-gap:var(--col-gap);
+  grid-template-columns:minmax(0,1fr);
+}
+@media(min-width:900px){
+  .statement__grid{grid-template-columns:repeat(4,minmax(0,1fr));align-items:start}
+  .statement__grid > *{grid-column:span 2}
+}
 
-				<h2>Make physical room for becoming.</h2>
+.neg{
+  margin:26px 0 0;
+  font-weight:200;
+  font-stretch:98%;
+  font-size:clamp(1.85rem,4.7vw,3.1rem);
+  line-height:1.2;letter-spacing:-.024em;
+  color:var(--gray-1);
+}
+.neg .is{
+  display:block;margin-top:.5em;
+  color:var(--ink);font-weight:400;
+}
+.neg .is b{font-weight:600}
 
-				<p>
-					MAKEROOM is an experimental creative gathering built around
-					the idea that transformation needs space.
-				</p>
+.statement__note{
+  margin:clamp(28px,3.6vw,44px) 0 0;
+  max-width:48ch;font-size:1rem;line-height:1.72;color:var(--gray-1);
+}
+.statement__note strong{color:var(--ink);font-weight:600}
 
-				<p>
-					Part studio. Part gallery. Part wardrobe experience.
-					Part social room. Part cultural gathering place.
-				</p>
+.plate{position:relative;margin:0}
+.plate img{width:100%;height:auto;object-fit:cover}
+/* program */
+.prog{padding-block:clamp(56px,10vh,120px) clamp(78px,13vh,168px)}
+.prog__head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  gap:24px;flex-wrap:wrap;padding-bottom:22px;
+}
+.prog__list{list-style:none;margin:0;padding:0}
+.item{
+  display:grid;gap:8px clamp(20px,3vw,44px);
+  grid-template-columns:minmax(0,1fr);
+  padding-block:clamp(22px,3.2vw,36px);
+  border-top:1px solid var(--rule);
+}
+.item:last-child{border-bottom:1px solid var(--rule)}
+.item__word{
+  margin:0;
+  font-weight:600;
+  font-stretch:88%;
+  font-size:clamp(2rem,6.2vw,4.1rem);
+  line-height:.96;letter-spacing:-.026em;
+  text-transform:uppercase;color:var(--ink);
+  transition:transform .45s cubic-bezier(.2,.7,.3,1),opacity .3s ease;
+}
+.item__gloss{
+  margin:0;max-width:46ch;
+  font-size:1rem;line-height:1.62;
+  color:var(--gray-1);
+}
+.item:hover .item__word{transform:translateX(9px)}
 
-				<div class="info-grid">
-					<div class="card">
-						<h3>Art</h3>
-						<p>Original work, visual culture, and creative exploration.</p>
-					</div>
+@media(min-width:900px){
+  .item{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:var(--col-gap);align-items:baseline}
+  .item__word{grid-column:1/3}
+  .item__gloss{grid-column:3/5}
+}
 
-					<div class="card">
-						<h3>Wardrobe</h3>
-						<p>Clothing, styling, exchange, alteration, and self-expression.</p>
-					</div>
+/* experiment */
+.exp{
+  position:relative;
+  background:var(--ink);color:var(--paper);
+  padding-block:clamp(84px,15vh,190px);
+  overflow:hidden;
+}
+.exp__edge{
+  left:calc(var(--gutter) * .3);top:16%;
+  color:var(--rule-ink);
+}
+@media(max-width:899px){.exp__edge{display:none}}
 
-					<div class="card">
-						<h3>Hospitality</h3>
-						<p>Coffee, wine, mocktails, conversation, and gathering.</p>
-					</div>
+.exp__grid{
+  display:grid;row-gap:clamp(34px,5vw,56px);column-gap:var(--col-gap);
+  grid-template-columns:minmax(0,1fr);
+}
+@media(min-width:900px){
+  .exp__grid{grid-template-columns:repeat(4,minmax(0,1fr));align-items:start}
+  .exp__grid > *{grid-column:span 2}
+}
 
-					<div class="card">
-						<h3>Music</h3>
-						<p>A shifting soundscape from daytime creativity into evening energy.</p>
-					</div>
-				</div>
-			</section>
+.exp h2{
+  margin:26px 0 0;
+  font-weight:200;
+  font-stretch:98%;
+  font-size:clamp(1.85rem,4.7vw,3.1rem);
+  line-height:1.2;letter-spacing:-.024em;
+  color:var(--gray-2);text-wrap:balance;
+}
+.exp h2 em{font-style:normal;color:var(--paper);display:block}
 
-			<section class="section cta">
-				<div class="eyebrow">Come make room</div>
+/* body copy only: must not catch the eyebrow or the rotated edge caption */
+.exp__grid p:not(.eyebrow){
+  margin:0 0 18px;max-width:48ch;
+  font-size:1rem;line-height:1.75;color:var(--gray-3);
+}
+.exp__grid p:not(.eyebrow):last-of-type{margin-bottom:0}
 
-				<h2>October 9, 2026</h2>
+.recombine{
+  margin-top:clamp(40px,6vw,72px);
+  padding-top:26px;border-top:1px solid var(--rule-ink);
+  display:flex;flex-wrap:wrap;align-items:center;
+  gap:10px clamp(10px,1.6vw,20px);
+}
+.recombine span{
+  font-size:clamp(10px,1.2vw,12px);font-weight:600;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--paper);
+}
+.recombine i{
+  font-style:normal;color:var(--gray-2);
+  font-size:clamp(9px,1vw,11px);
+}
 
-				<p>
-					Los Angeles, CA 90021<br />
-					12 PM — 9 PM
-				</p>
+/* community */
+.people{padding-block:clamp(78px,13vh,170px)}
+.people__grid{
+  display:grid;row-gap:clamp(40px,6vw,56px);column-gap:var(--col-gap);
+  grid-template-columns:minmax(0,1fr);
+  align-items:start;
+}
+@media(min-width:900px){
+  .people__grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .people__grid > *{grid-column:span 2}
+}
+.bio+.bio{margin-top:clamp(40px,5.5vw,64px)}
+.bio h3{
+  margin:16px 0 0;
+  font-weight:600;
+  font-stretch:90%;
+  font-size:clamp(1.5rem,3.4vw,2.25rem);
+  line-height:1.06;letter-spacing:-.022em;
+  text-transform:uppercase;color:var(--ink);
+}
+.bio__logo{margin:18px 0 0;line-height:0}
+.bio__logo img{width:clamp(168px,21vw,206px);height:auto}
+/* stacked/portrait logo: match optical weight by capping height, not width */
+.bio__logo--tall img{width:auto;height:clamp(96px,12vw,122px)}
 
-				<a href="#rsvp">RSVP</a>
-			</section>
-		</main>
+.bio__role{
+  margin:11px 0 0;
+  font-size:10px;font-weight:600;
+  letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gray-1);
+}
+.bio p.bio__txt{
+  margin:16px 0 0;max-width:46ch;
+  font-size:.97rem;line-height:1.72;color:var(--gray-1);
+}
 
-		<Footer />
-	</body>
+/* close */
+.close{
+  padding-block:clamp(78px,13vh,175px);
+  border-top:1px solid var(--rule);
+}
+.come{
+  margin:0;
+  font-weight:700;
+  font-stretch:86%;
+  font-size:clamp(2.4rem,10.6vw,8.6rem);
+  line-height:.94;letter-spacing:-.032em;
+  text-transform:uppercase;color:var(--ink);
+}
+
+.close__grid{
+  margin-top:clamp(44px,6vw,80px);
+  padding-top:clamp(26px,3.4vw,40px);
+  border-top:1px solid var(--rule);
+  display:grid;row-gap:clamp(26px,4vw,40px);column-gap:var(--col-gap);
+  grid-template-columns:minmax(0,1fr);
+}
+@media(min-width:560px){
+  .close__grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+}
+@media(min-width:900px){
+  .close__grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+.fact{margin:0}
+.fact dt{
+  font-size:10px;font-weight:600;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--gray-1);
+}
+.fact dd{
+  margin:12px 0 0;
+  font-weight:400;
+  font-size:clamp(1.1rem,2vw,1.45rem);
+  line-height:1.3;letter-spacing:-.01em;color:var(--ink);
+}
+.fact dd small{
+  display:block;margin-top:7px;
+  font-size:12px;font-weight:400;
+  letter-spacing:.03em;color:var(--gray-1);
+}
+
+.rsvp{
+  display:inline-flex;align-items:center;gap:16px;
+  background:var(--ink);color:var(--paper);
+  padding:20px 34px;min-height:44px;
+  font-size:11px;font-weight:700;letter-spacing:.3em;
+  text-transform:uppercase;text-decoration:none;
+  border:1px solid var(--ink);
+  transition:background .3s ease,gap .3s ease,color .3s ease;
+}
+.rsvp:hover,.rsvp:focus-visible{background:var(--ink-2);gap:24px}
+.rsvp svg{width:38px;height:14px;flex:none;overflow:visible}
+.rsvp svg path{fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round}
+
+.rsvp--ghost{
+  background:transparent;color:var(--ink);
+  border:1px solid var(--ink);
+}
+.rsvp--ghost:hover,.rsvp--ghost:focus-visible{background:var(--ink);color:var(--paper)}
+
+/* two doors: come along, or help build it */
+.doors{
+  margin-top:clamp(44px,6vw,78px);
+  padding-top:clamp(30px,4vw,46px);
+  border-top:1px solid var(--rule);
+  display:grid;row-gap:clamp(34px,5vw,56px);column-gap:var(--col-gap);
+  grid-template-columns:minmax(0,1fr);
+}
+@media(min-width:900px){
+  .doors{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .doors > *{grid-column:span 2}
+}
+.door{display:flex;flex-direction:column;align-items:flex-start;gap:18px}
+.door h3{
+  margin:0;
+  font-weight:600;
+  font-size:clamp(1.15rem,2.1vw,1.5rem);
+  line-height:1.2;letter-spacing:-.018em;color:var(--ink);
+}
+.door p{
+  margin:0;max-width:42ch;
+  font-size:.97rem;line-height:1.66;color:var(--gray-1);
+}
+.ways{
+  list-style:none;margin:0;padding:0;
+  display:flex;flex-direction:column;gap:8px;width:100%;
+}
+.ways li{
+  display:flex;gap:12px;align-items:baseline;
+  font-size:.94rem;line-height:1.5;color:var(--gray-1);
+  padding-bottom:8px;border-bottom:1px solid var(--rule);
+}
+.door__alt{
+  margin:0;font-size:13px;line-height:1.5;color:var(--gray-1);
+}
+.door__alt a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule);padding-bottom:1px}
+.door__alt a:hover,.door__alt a:focus-visible{border-bottom-color:var(--ink)}
+
+.ways b{
+  flex:none;min-width:8.5em;
+  font-weight:600;font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ink);
+}
+
+/* --- 5. FOOTER ----------------------------------------------------------- */
+.foot{
+  background:var(--ink);color:var(--paper);
+  padding-block:clamp(48px,7vh,80px);
+}
+.foot__top{
+  display:grid;row-gap:clamp(28px,4vw,44px);column-gap:var(--col-gap);
+  grid-template-columns:minmax(0,1fr);
+}
+@media(min-width:560px){
+  .foot__top{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:900px){
+  .foot__top{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .foot__top > div:first-child{grid-column:span 2}
+}
+.foot__mark{
+  margin:0;
+  font-size:clamp(1.45rem,4.2vw,2.5rem);font-weight:700;
+  font-stretch:92%;
+  letter-spacing:.012em;line-height:1;color:var(--paper);
+}
+.foot__mark span{font-weight:200;letter-spacing:.05em}
+.foot__tag{
+  margin:16px 0 0;max-width:32ch;
+  font-weight:300;
+  font-size:1rem;line-height:1.5;color:var(--gray-2);
+}
+.fcol h4{
+  margin:0 0 14px;
+  font-size:10px;font-weight:600;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--gray-2);
+}
+.fcol ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.fcol li{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.fcol a.sub{font-size:12px;color:var(--gray-2);border-bottom-color:var(--rule-ink)}
+.fcol a.sub:hover,.fcol a.sub:focus-visible{color:var(--paper);border-bottom-color:var(--paper)}
+.fcol a,.fcol span{
+  font-size:13px;line-height:1.5;color:var(--paper);
+  text-decoration:none;
+}
+.fcol a{
+  border-bottom:1px solid var(--rule-ink);
+  padding-bottom:2px;display:inline-block;
+  transition:border-color .25s ease;
+}
+.fcol a:hover,.fcol a:focus-visible{border-color:var(--paper)}
+
+.foot__base{
+  margin-top:clamp(40px,6vh,72px);padding-top:22px;
+  border-top:1px solid var(--rule-ink);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-size:10px;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--gray-2);
+}
+
+/* --- 6. FOCUS + MOTION --------------------------------------------------- */
+a:focus-visible,button:focus-visible{
+  outline:2px solid var(--ink);outline-offset:4px;
+}
+.hero a:focus-visible,.exp a:focus-visible,.foot a:focus-visible{outline-color:var(--paper)}
+
+.rise{animation:rise .95s cubic-bezier(.16,.84,.36,1) both}
+.rise-2{animation-delay:.1s}
+.rise-3{animation-delay:.2s}
+@keyframes rise{from{transform:translateY(16px)}to{transform:none}}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+/* ==========================================================================
+   7. SIMPLE PAGE: 404.html
+   Reuses .wrap, .grain, .eyebrow and .rsvp from above; only layout differs.
+   ========================================================================== */
+.page-simple{display:flex;flex-direction:column;min-height:100vh}
+
+.page-simple .top{padding-block:clamp(22px,3vw,34px)}
+.page-simple .mark{
+  font-size:12px;font-weight:700;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--ink);text-decoration:none;
+}
+.page-simple .mark span{font-weight:300}
+
+.page-simple main{
+  flex:1;display:flex;align-items:center;
+  padding-block:clamp(50px,10vh,120px);
+}
+.page-simple h1{
+  margin:26px 0 0;
+  font-weight:700;font-stretch:88%;
+  font-size:clamp(2.4rem,9vw,6.4rem);line-height:.96;
+  letter-spacing:-.03em;text-transform:uppercase;color:var(--ink);
+}
+.page-simple .lede{
+  margin:clamp(24px,3vw,34px) 0 0;max-width:44ch;
+  font-weight:200;font-size:clamp(1.15rem,2.3vw,1.6rem);
+  line-height:1.34;letter-spacing:-.018em;color:var(--gray-1);
+}
+.page-simple .facts{
+  margin-top:clamp(40px,5vw,64px);
+  padding-top:clamp(24px,3vw,34px);
+  border-top:1px solid var(--rule);
+  display:flex;flex-wrap:wrap;gap:10px clamp(16px,2.6vw,34px);
+  font-size:11px;font-weight:600;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gray-1);
+}
+.page-simple .rsvp{margin-top:clamp(36px,4.5vw,54px)}
+
+.page-simple .foot-slim{
+  background:var(--ink);color:var(--gray-2);
+  padding-block:clamp(26px,4vh,40px);
+  font-size:10px;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;
+}
+.page-simple .foot-slim .wrap{
+  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+}
+</style>
+
+</head>
+<body id="top">
+
+<a class="skip" href="#room">Skip to content</a>
+
+<svg class="grain" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <filter id="gr">
+    <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer><feFuncA type="linear" slope="0.14"/></feComponentTransfer>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#gr)"/>
+</svg>
+
+<header class="hero">
+  <img class="hero__img" src="assets/img/hero.jpg" width="1400" height="2100" fetchpriority="high" decoding="async"
+       alt="The MAKEROOM space in the Arts District: exposed brick, concrete floor and steel windows in late afternoon light.">
+  <div class="hero__scrim"></div>
+
+  <div class="wrap nav">
+    <a class="nav__mark" href="#top">MAKE<span>ROOM</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#room">The Room</a>
+      <a href="#program">Program</a>
+      <a href="#involved">Get Involved</a>
+      <a href="#rsvp">RSVP</a>
+    </nav>
+  </div>
+
+  <div class="wrap hero__body">
+    <p class="wordmark rise">MAKE<span>ROOM</span></p>
+
+    <div class="hero__low">
+      <h1 class="hl rise rise-2">
+        <span class="hl__caps">There should be</span>
+        <span class="hl__caps">room for</span>
+        <span class="hl__big">becoming.
+          <svg class="hl__ring" viewBox="0 0 600 200" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M302 13C150 9 26 50 18 99c-8 51 156 92 302 89 144-3 268-44 262-95C577 44 440 12 288 16"/>
+          </svg>
+        </span>
+      </h1>
+
+      <div class="hero__aside rise rise-3">
+        <p class="hero__sub">An evolving series of creative, mindful activations in the Arts District, Los Angeles. The inaugural one opens October 9.</p>
+        <a class="cta" href="#rsvp">
+          Make Room
+          <svg viewBox="0 0 120 30" aria-hidden="true">
+            <path d="M2 15C38 11 72 13 114 15"/>
+            <path d="M96 3c7 5 13 9 21 12-8 4-14 8-21 14"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <p class="vert hero__edge">Inaugural activation &nbsp;&middot;&nbsp; Los Angeles</p>
+</header>
+
+<main>
+
+  <!-- STATEMENT -->
+  <section class="statement wrap" id="room">
+    <div class="statement__grid">
+      <div>
+        <p class="eyebrow">What it is</p>
+        <p class="neg">
+          It&rsquo;s not a gallery.<br>
+          It&rsquo;s not a retail store.<br>
+          It&rsquo;s not a traditional party.
+          <span class="is">It&rsquo;s a room for <b>becoming</b>.</span>
+        </p>
+        <p class="statement__note">
+          Each time, a single room in the Arts District holds art, wardrobe, alteration,
+          sound, wellness and hospitality at once, and everyone those things belong to. <strong>It opens all ages at noon and returns at five as a 21+ evening</strong>.
+          Same room, same making. Different light.
+        </p>
+      </div>
+
+      <figure class="plate">
+        <img src="assets/img/room-tall.jpg" width="1080" height="1350" loading="lazy" decoding="async"
+             alt="Brick wall, worktable and stools inside the MAKEROOM space, raking afternoon light across the floor.">
+      </figure>
+    </div>
+  </section>
+
+  <!-- PROGRAM -->
+  <section class="prog wrap" id="program">
+    <div class="prog__head">
+      <p class="eyebrow">The program</p>
+    </div>
+
+    <ul class="prog__list">
+      <li class="item">
+        <h2 class="item__word">Art</h2>
+        <p class="item__gloss">Original work by Kay Wheeler on the brick, and installations that stay live from noon to close.</p>
+      </li>
+      <li class="item">
+        <h2 class="item__word">Fashion</h2>
+        <p class="item__gloss">A clothing swap, trade and alteration bar. Bring a piece, take a piece, or rework the one you came in wearing.</p>
+      </li>
+      <li class="item">
+        <h2 class="item__word">Create</h2>
+        <p class="item__gloss">A family-style table of prompts, collage, patches and open-ended making. Nothing you make here has to be finished.</p>
+      </li>
+      <li class="item">
+        <h2 class="item__word">Sound</h2>
+        <p class="item__gloss">Quiet enough to work through the afternoon. A DJ once the light drops.</p>
+      </li>
+      <li class="item">
+        <h2 class="item__word">Wellness</h2>
+        <p class="item__gloss">Youth Dealer - Make Room Wellness: pop-up micro facials and beauty care, plus a guided breathwork session led by a visiting instructor to open the day.</p>
+      </li>
+      <li class="item">
+        <h2 class="item__word">Hospitality</h2>
+        <p class="item__gloss">Coffee through the afternoon. Wine, mocktails and food trucks parked outside from five.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- EXPERIMENT -->
+  <section class="exp">
+    <div class="wrap exp__grid">
+      <div>
+        <p class="eyebrow eyebrow--lit">The experiment</p>
+        <h2>The format can change.<em>The invitation stays the same.</em></h2>
+      </div>
+      <div>
+        <p>
+          MAKEROOM is built as an experiment, not a template. Every activation recombines
+          the same materials: artists, fashion, objects, sound, hospitality, wellness,
+          community. Each one becomes a room that has never existed in exactly that
+          arrangement before.
+        </p>
+        <p>
+          One month it leans gallery. The next it leans workshop, or listening room, or
+          dinner. What stays fixed is the invitation: come as you are, make something,
+          take something, leave a little different.
+        </p>
+        <p>
+          There is always room for another idea, another perspective, another version of yourself.
+        </p>
+      </div>
+    </div>
+
+    <div class="wrap recombine" role="group" aria-label="The recurring elements of each activation">
+      <span>Artists</span><i aria-hidden="true">&times;</i>
+      <span>Fashion</span><i aria-hidden="true">&times;</i>
+      <span>Objects</span><i aria-hidden="true">&times;</i>
+      <span>Sound</span><i aria-hidden="true">&times;</i>
+      <span>Hospitality</span><i aria-hidden="true">&times;</i>
+      <span>Wellness</span><i aria-hidden="true">&times;</i>
+      <span>Community</span>
+    </div>
+
+    <p class="vert exp__edge">Arts District &nbsp;&middot;&nbsp; Los Angeles</p>
+  </section>
+
+  <!-- COMMUNITY -->
+  <section class="people wrap">
+    <div class="people__grid">
+      <figure class="plate">
+        <img src="assets/img/portrait-kay.jpg" width="1080" height="1350" loading="lazy" decoding="async"
+             alt="Kay Wheeler, photographed in black and white against a brick wall.">
+      </figure>
+
+      <div>
+        <p class="eyebrow">Founder</p>
+
+        <div class="bio">
+          <h3>Kay Wheeler</h3>
+          <p class="bio__role">Featured artist</p>
+          <p class="bio__txt">
+            A multi-disciplinary artist and stylist working across art, wardrobe and
+            hospitality in Los Angeles. The original work on the brick is theirs, made
+            for this room. MAKEROOM began with a question they kept asking: what would
+            a room look like if nobody in it had to pick one category to be?
+          </p>
+        </div>
+
+        <div class="bio">
+          <h3 class="bio__logo"><img src="assets/img/majestic-logo.png" width="560" height="273" loading="lazy" decoding="async" alt="Majestic Art Gallery"></h3>
+          <p class="bio__role">Community arts partner</p>
+          <p class="bio__txt">
+            A DTLA 501(c)(3) nonprofit empowering children and families through art and advocacy.
+            Majestic anchors the family-facing side of the room and receives all in-kind
+            support for the activation.
+          </p>
+        </div>
+
+        <div class="bio">
+          <h3 class="bio__logo bio__logo--tall"><a href="https://youthdealer.myshopify.com/" target="_blank" rel="noopener"><img src="assets/img/youthdealer-logo.png" width="460" height="690" loading="lazy" decoding="async" alt="Youth Dealer"></a></h3>
+          <p class="bio__role">Wellness partner</p>
+          <p class="bio__txt">
+            A skincare line centering melanin and honoring every shade, founded by
+            licensed esthetician Brandi J. Andrews on the belief that care should feel
+            intentional, not rushed. Youth Dealer runs Make Room Wellness: pop-up micro
+            facials, skin consultations and beauty care through the afternoon.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSE -->
+  <section class="close wrap" id="rsvp">
+    <p class="eyebrow">The inaugural activation</p>
+    <p class="come">Come make room.</p>
+
+    <div class="close__grid">
+      <dl class="fact">
+        <dt>Where</dt>
+        <dd>Arts District<small>Los Angeles, CA 90021</small></dd>
+      </dl>
+      <dl class="fact">
+        <dt>When</dt>
+        <dd>Friday, October 9<small>2026</small></dd>
+      </dl>
+      <dl class="fact">
+        <dt>Daytime</dt>
+        <dd>12 &ndash; 4 PM<small>Make Room to Play &middot; All ages</small></dd>
+      </dl>
+      <dl class="fact">
+        <dt>Evening</dt>
+        <dd>5 &ndash; 9 PM<small>Make Room to Feel &middot; 21+</small></dd>
+      </dl>
+    </div>
+
+    <div class="doors">
+      <div class="door">
+        <h3>Coming along?</h3>
+        <p>Free to attend. Tell us you&rsquo;re coming, who you&rsquo;re bringing, and what you&rsquo;re making room for.</p>
+
+        <a class="rsvp" href="https://docs.google.com/forms/d/e/1FAIpQLSfqP2VO002_GZStXnp9bfTKgvmA6uT2-KaAvSIPTcn0QmbAOA/viewform" target="_blank" rel="noopener">
+          RSVP
+          <svg viewBox="0 0 110 28" aria-hidden="true">
+            <path d="M2 14C36 10 68 12 104 14"/>
+            <path d="M88 3c6 4 12 8 19 11-7 4-13 8-19 13"/>
+          </svg>
+        </a>
+        <p class="door__alt">Or email <a href="mailto:rsvp@makeroomexp.org">rsvp@makeroomexp.org</a></p>
+      </div>
+
+      <div class="door" id="involved">
+        <h3>Or help us build it.</h3>
+        <ul class="ways">
+          <li><b>Volunteer</b><span>Setup, day or evening shift. Roughly three to five hours.</span></li>
+          <li><b>Artist / maker</b><span>Show work, run a table, or make something in the room.</span></li>
+          <li><b>Vendor</b><span>Bring product for the day.</span></li>
+          <li><b>In-kind</b><span>Furniture, clothing for the swap, bar supplies, food trucks.</span></li>
+          <li><b>Breathwork</b><span>Open the day with a guided session.</span></li>
+          <li><b>Photo / video</b><span>Document the day from more angles.</span></li>
+        </ul>
+        <p>In-kind donations are received through Majestic Art Gallery, a registered 501(c)(3) nonprofit, and may be tax-deductible to the extent allowed by law.</p>
+
+        <a class="rsvp rsvp--ghost" href="https://docs.google.com/forms/d/e/1FAIpQLSfJFTeMTCuegl9182EnXL3MCN96qcWpJuODHzOF-CJeKMtl-g/viewform"
+           target="_blank" rel="noopener">
+          Get involved
+          <svg viewBox="0 0 110 28" aria-hidden="true">
+            <path d="M2 14C36 10 68 12 104 14"/>
+            <path d="M88 3c6 4 12 8 19 11-7 4-13 8-19 13"/>
+          </svg>
+        </a>
+        <p class="door__alt">Or email <a href="mailto:hello@makeroomexp.org">hello@makeroomexp.org</a></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__top">
+      <div>
+        <p class="foot__mark">MAKE<span>ROOM</span></p>
+        <p class="foot__tag">Making physical room for becoming. Arts District, Los Angeles.</p>
+      </div>
+
+      <div class="fcol">
+        <h4>Made by</h4>
+        <ul>
+          <li><span>Kay Wheeler</span></li>
+          <li>
+            <span>Majestic Art Gallery</span>
+            <a class="sub" href="mailto:info@majesticartgallery.org">info@majesticartgallery.org</a>
+          </li>
+          <li>
+            <span>Youth Dealer</span>
+            <a class="sub" href="https://youthdealer.myshopify.com/" target="_blank" rel="noopener">youthdealer.com</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="fcol">
+        <h4>Find us</h4>
+        <ul>
+          <li><a href="https://instagram.com/kaywheeeler" target="_blank" rel="noopener noreferrer">Instagram &middot; @kaywheeeler</a></li>
+          <li><a href="mailto:hello@makeroomexp.org">hello@makeroomexp.org</a></li>
+          <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfqP2VO002_GZStXnp9bfTKgvmA6uT2-KaAvSIPTcn0QmbAOA/viewform" target="_blank" rel="noopener">RSVP for October 9</a></li>
+          <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfJFTeMTCuegl9182EnXL3MCN96qcWpJuODHzOF-CJeKMtl-g/viewform" target="_blank" rel="noopener">Volunteer or sponsor</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot__base">
+      <span>MAKEROOM &middot; An ongoing series of creative activations</span>
+      <span>Los Angeles, CA &middot; 2026</span>
+    </div>
+  </div>
+</footer>
+
+</body>
 </html>
