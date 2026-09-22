@@ -9,42 +9,184 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+
+		<style>
+			:global(html) {
+				scroll-behavior: smooth;
+			}
+
+			:global(body) {
+				margin: 0;
+				background: #f2eee6;
+				color: #171717;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			main {
+				min-height: 100vh;
+			}
+
+			.hero {
+				min-height: 85vh;
+				display: flex;
+				align-items: flex-end;
+				padding: 8vw;
+				box-sizing: border-box;
+				background: #171717;
+				color: #f2eee6;
+			}
+
+			.hero-content {
+				max-width: 1000px;
+			}
+
+			.eyebrow {
+				font-size: 14px;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+				margin-bottom: 24px;
+			}
+
+			h1 {
+				font-size: clamp(4rem, 12vw, 10rem);
+				line-height: 0.82;
+				letter-spacing: -0.07em;
+				margin: 0 0 32px;
+			}
+
+			.hero p {
+				font-size: clamp(1.2rem, 2vw, 1.8rem);
+				line-height: 1.4;
+				max-width: 700px;
+				margin: 0;
+			}
+
+			.section {
+				padding: 100px 8vw;
+			}
+
+			.section h2 {
+				font-size: clamp(2.5rem, 6vw, 5rem);
+				line-height: 0.95;
+				letter-spacing: -0.05em;
+				margin: 0 0 32px;
+			}
+
+			.section p {
+				font-size: 1.25rem;
+				line-height: 1.6;
+				max-width: 720px;
+			}
+
+			.info-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+				gap: 24px;
+				margin-top: 60px;
+			}
+
+			.card {
+				border-top: 2px solid currentColor;
+				padding-top: 20px;
+			}
+
+			.card h3 {
+				font-size: 1.1rem;
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+			}
+
+			.card p {
+				font-size: 1rem;
+			}
+
+			.cta {
+				background: #d9d1c2;
+			}
+
+			.cta a {
+				display: inline-block;
+				margin-top: 20px;
+				padding: 16px 24px;
+				background: #171717;
+				color: #f2eee6;
+				text-decoration: none;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				font-weight: bold;
+			}
+		</style>
 	</head>
+
 	<body>
 		<Header />
+
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<section class="hero">
+				<div class="hero-content">
+					<div class="eyebrow">Los Angeles · Arts District · October 9, 2026</div>
+
+					<h1>MAKEROOM</h1>
+
+					<p>
+						A space for art, wardrobe, alteration, hospitality, music,
+						and the people becoming something new.
+					</p>
+				</div>
+			</section>
+
+			<section class="section">
+				<div class="eyebrow">The idea</div>
+
+				<h2>Make physical room for becoming.</h2>
+
+				<p>
+					MAKEROOM is an experimental creative gathering built around
+					the idea that transformation needs space.
+				</p>
+
+				<p>
+					Part studio. Part gallery. Part wardrobe experience.
+					Part social room. Part cultural gathering place.
+				</p>
+
+				<div class="info-grid">
+					<div class="card">
+						<h3>Art</h3>
+						<p>Original work, visual culture, and creative exploration.</p>
+					</div>
+
+					<div class="card">
+						<h3>Wardrobe</h3>
+						<p>Clothing, styling, exchange, alteration, and self-expression.</p>
+					</div>
+
+					<div class="card">
+						<h3>Hospitality</h3>
+						<p>Coffee, wine, mocktails, conversation, and gathering.</p>
+					</div>
+
+					<div class="card">
+						<h3>Music</h3>
+						<p>A shifting soundscape from daytime creativity into evening energy.</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="section cta">
+				<div class="eyebrow">Come make room</div>
+
+				<h2>October 9, 2026</h2>
+
+				<p>
+					Los Angeles, CA 90021<br />
+					12 PM — 9 PM
+				</p>
+
+				<a href="#rsvp">RSVP</a>
+			</section>
 		</main>
+
 		<Footer />
 	</body>
 </html>
